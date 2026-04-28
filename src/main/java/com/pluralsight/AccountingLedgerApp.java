@@ -51,70 +51,40 @@ public class AccountingLedgerApp {
     // make deposits screen
     public static void makeDeposit() {
         boolean run = true;
-        double deposit = 0.00;
-        String name = "";
-        String cardNum = "";
-        String date = "";
-        String cvv = "";
-        String zip = "";
 
         while (run) {
-            System.out.println("\t1 Enter Deposit Amount");
-            System.out.println("\t2 Enter Debit Card Information");
-            System.out.println("\t3 Submit Deposit");
-            System.out.println("\t4 Cancel/Go Back");
+            System.out.print("Enter Deposit Amount: $");
+            double deposit = sc.nextDouble();
+            sc.nextLine();
+
+            System.out.print("Confirm Deposit (Y/N): ");
+            String confirm = sc.nextLine();
+
+            if (confirm.equalsIgnoreCase("Y")) {
+                saveTransactions("Deposit", "Self", deposit);
+                System.out.println("Deposit Successful");
+            } else {
+                System.out.println("Deposit Cancelled");
+            }
+            System.out.println("Would you like to:");
+            System.out.println("\t 1 Make another deposit");
+            System.out.println("\t 2 Go Back to Home Screen");
             System.out.print("Enter your choice here: ");
             int choice = sc.nextInt();
             sc.nextLine();
 
             switch (choice) {
                 case 1:
-                    System.out.print("Enter Deposit Amount: $");
-                    deposit = sc.nextDouble();
-                    sc.nextLine();
+                    System.out.println("\n Making another deposit");
                     break;
                 case 2:
-                    System.out.println("Enter Debit Card Information");
-                    System.out.print("\t Name on Card: ");
-                    name = sc.nextLine().trim();
-                    while (true) {
-                        System.out.print("\t Card Number (16-Digits): ");
-                        cardNum = sc.nextLine().trim();
-
-                        if (cardNum.matches("\\d{16}")) {
-                            break;
-                        }
-                        System.out.println("Invalid card number. Must be 16 digits");
-                    }
-                    System.out.print("\t Expiration Date (MM/YY): ");
-                    date = sc.nextLine();
-                    System.out.print("\t CVV (3-Digits): ");
-                    cvv = sc.nextLine();
-                    System.out.print("\t Zip-Code (5-Digits): ");
-                    zip = sc.nextLine();
-                    break;
-                case 3:
-                    System.out.println("Deposit Amount: $" + deposit);
-                    System.out.println("Card number ending in " + cardNum.substring(12));
-                    System.out.println("Expiration: " + date);
-                    System.out.println("Zip-Code: " + zip);
-
-                    System.out.println("Confirm Deposit (Y/N)");
-                    saveTransactions("Deposit", name, deposit);
-                    String confirmation = sc.nextLine().trim();
-
-                    if (confirmation.equalsIgnoreCase("Y")) {
-                        System.out.println("Deposit Successful");
-                    } else {
-                        System.out.println("Deposit Cancelled");
-                    }
-                    break;
-                case 4:
-                    System.out.println("Exiting to Home Screen");
+                    System.out.println("Returning to Home Screen");
                     run = false;
                     break;
                 default:
                     System.out.println("Invalid selection; Please try again");
+                    break;
+
 
             }
 
@@ -125,75 +95,72 @@ public class AccountingLedgerApp {
     // make payment screen
     public static void makePayment() {
         boolean run = true;
-        double payment = 0.00;
-        String name = "";
-        String cardNum = "";
-        String date = "";
-        String cvv = "";
-        String zip = "";
 
         while (run) {
-            System.out.println("\t1 Enter Payment Amount");
-            System.out.println("\t2 Enter Debit Card Information");
-            System.out.println("\t3 Submit Payment");
-            System.out.println("\t4 Cancel/Go Back");
+            System.out.print("Enter Payment Amount: $");
+            double payment = sc.nextDouble();
+            sc.nextLine();
+            System.out.print("Enter a Payment Description: ");
+            String description = sc.nextLine();
+            System.out.print("Enter Vendor Name:");
+            String vendor = sc.nextLine();
+            System.out.println("Debit Card Information");
+
+            String cardNum = "";
+            while (true) {
+                System.out.print("Enter Card Number (16-Digits): ");
+                cardNum = sc.nextLine().trim();
+                if (cardNum.matches("\\d{16}"))
+                    break;
+                System.out.println("Invalid card number. Must be 16 digits");
+            }
+            System.out.print("Expiration date: ");
+            String date = sc.nextLine();
+
+            System.out.print("CVV 3 Digits: ");
+            String cvv = sc.nextLine();
+
+            System.out.print("Zip-Code: ");
+            String zip = sc.nextLine();
+
+            System.out.println("Description: " + description);
+            System.out.println("Vendor: " + vendor);
+            System.out.println("Payment Amount: $" + payment);
+            System.out.println("Card Ending in " + cardNum.substring(12));
+            System.out.println("Expiration: " + date);
+            System.out.println("Zip-Code: " + zip);
+
+            System.out.print("Confirm Payment (Y/N): ");
+            String confirm = sc.nextLine();
+
+            if (confirm.equalsIgnoreCase("Y")) {
+                saveTransactions(description, vendor, -payment);
+                System.out.println("Payment Successful");
+            } else {
+                System.out.println("Payment Cancelled");
+            }
+            System.out.println("Would you like to:");
+            System.out.println("\t 1 Make another Payment");
+            System.out.println("\t 2 Go Back to Home Screen");
             System.out.print("Enter your choice here: ");
             int choice = sc.nextInt();
             sc.nextLine();
 
             switch (choice) {
                 case 1:
-                    System.out.print("Enter Payment Amount: $");
-                    payment = sc.nextDouble();
-                    sc.nextLine();
+                    System.out.println("\n Making another payment");
                     break;
                 case 2:
-                    System.out.println("Enter Debit Card Information");
-                    System.out.print("\t Name on Card: ");
-                    name = sc.nextLine().trim();
-                    while (true) {
-                        System.out.print("\t Card Number (16-Digits): ");
-                        cardNum = sc.nextLine().trim();
-
-                        if (cardNum.matches("\\d{16}")) {
-                            break;
-                        }
-                        System.out.println("Invalid card number. Must be 16 digits");
-                    }
-                    System.out.print("\t Expiration Date (MM/YY): ");
-                    date = sc.nextLine();
-                    System.out.print("\t CVV (3-Digits): ");
-                    cvv = sc.nextLine();
-                    System.out.print("\t Zip-Code (5-Digits): ");
-                    zip = sc.nextLine();
-                    break;
-                case 3:
-                    System.out.println("Payment Amount: $" + payment);
-                    System.out.println("Card number ending in " + cardNum.substring(12));
-                    System.out.println("Expiration: " + date);
-                    System.out.println("Zip-Code: " + zip);
-
-                    System.out.println("Confirm Payment (Y/N): ");
-                    String confirmation = sc.nextLine().trim();
-
-                    if (confirmation.equalsIgnoreCase("Y")) {
-                        saveTransactions("Payment", name, payment);
-                        System.out.println("Payment Successful");
-                    } else {
-                        System.out.println("Payment Cancelled");
-                    }
-                    break;
-                case 4:
-                    System.out.println("Exiting to Home Screen");
+                    System.out.println("Returning to Home Screen");
                     run = false;
                     break;
                 default:
                     System.out.println("Invalid selection; Please try again");
+                    break;
             }
-
         }
-
     }
+
     // save transactions
     public static void saveTransactions(String description, String vendor, double amount) {
         try (
