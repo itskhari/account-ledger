@@ -4,6 +4,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class AccountingLedgerApp {
@@ -111,6 +112,9 @@ public class AccountingLedgerApp {
                 case 4:
                     run = false;
                     break;
+                default:
+                    System.out.println("Invalid selection; Please try again");
+
             }
 
         }
@@ -181,6 +185,8 @@ public class AccountingLedgerApp {
                 case 4:
                     run = false;
                     break;
+                default:
+                    System.out.println("Invalid selection; Please try again");
             }
 
         }
@@ -215,10 +221,32 @@ public class AccountingLedgerApp {
             System.out.println("\t (R) Reports");
             System.out.println("\t (H) Home Screen");
             System.out.print("Enter your choice here: ");
+            String choice = sc.nextLine();
+
+            switch (choice) {
+                case 1:
+                    showAllEntries();
+                    break;
+                case 2:
+                    showDeposits();
+                    break;
+                case 3:
+                    showPayments();
+                    break;
+                case 4:
+                    showReports();
+                case 5:
+                    System.out.println("Exiting to Home Screen");
+                    run = false;
+                    break;
+                default:
+                    System.out.println("Invalid selection; Please try again");
+            }
 
         }
     }
     public static ArrayList<Transactions> loadTransactions() {
+        Collections.reverse(list);
 
         try(BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))) {
             String line;
