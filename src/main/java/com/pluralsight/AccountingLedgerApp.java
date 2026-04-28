@@ -83,7 +83,7 @@ public class AccountingLedgerApp {
                     break;
                 default:
                     System.out.println("Invalid selection; Please try again");
-                    break;
+
 
 
             }
@@ -102,7 +102,7 @@ public class AccountingLedgerApp {
             sc.nextLine();
             System.out.print("Enter a Payment Description: ");
             String description = sc.nextLine();
-            System.out.print("Enter Vendor Name:");
+            System.out.print("Enter Vendor Name: ");
             String vendor = sc.nextLine();
             System.out.println("Debit Card Information");
 
@@ -156,7 +156,7 @@ public class AccountingLedgerApp {
                     break;
                 default:
                     System.out.println("Invalid selection; Please try again");
-                    break;
+
             }
         }
     }
@@ -207,7 +207,7 @@ public class AccountingLedgerApp {
                 case "R":
                     showReports(list);
                 case "H":
-                    System.out.println("Exiting to Home Screen");
+                    System.out.println("Returning to Home Screen");
                     run = false;
                     break;
                 default:
@@ -223,7 +223,7 @@ public class AccountingLedgerApp {
             String line;
 
             while ((line = reader.readLine()) != null) {
-                String [] parts = line.split("\\,");
+                String [] parts = line.split(",");
                 String date = parts[0];
                 String time = parts [1];
                 String description = parts[2];
@@ -262,7 +262,9 @@ public class AccountingLedgerApp {
             }
         }
     }
-    public static void showReports(ArrayList<Transactions> list){
+
+    // report screen
+    public static void showReports(ArrayList<Transactions> list) {
         boolean run = true;
 
         while (run) {
@@ -272,10 +274,109 @@ public class AccountingLedgerApp {
             System.out.println("\t3 Year to Date");
             System.out.println("\t4 Previous Year");
             System.out.println("\t5 Search by Name");
-            System.out.println("\t6 Go Back/Cancel");
+            System.out.println("\t0 Back");
             System.out.print("Enter you choice here: ");
             int choice = sc.nextInt();
             sc.nextLine();
+
+            switch (choice) {
+                case 1:
+                    monthToDate(list);
+                    break;
+                case 2:
+                    previousMonth(list);
+                    break;
+                case 3:
+                    yearToDate(list);
+                    break;
+                case 4:
+                    previousYear(list);
+                    break;
+                case 5:
+                    searchByVendor(list);
+                    break;
+                case 0:
+                    System.out.println("Returning to Ledger Menu");
+                    run = false;
+                    break;
+                default:
+                    System.out.println("Invalid selection; Please try again");
+            }
         }
+    }
+
+    // report options
+    public static void monthToDate(ArrayList<Transactions> list) {
+        LocalDate today = LocalDate.now();
+
+        System.out.println("Month to Date");
+
+        for (Transactions entry : list) {
+            LocalDate transactionDate = LocalDate.parse(entry.date);
+
+            if (transactionDate.getYear() == today.getYear() &&
+            transactionDate.getMonth() == today.getMonth()) {
+                displayTransaction(entry);
+            }
+        }
+    }
+    public static void previousMonth(ArrayList<Transactions> list) {
+        LocalDate today = LocalDate.now();
+        LocalDate prevMonth = today.minusMonths(1);
+
+        System.out.println("Previous Month");
+
+        for (Transactions entry : list) {
+            LocalDate transactionDate = LocalDate.parse(entry.date);
+
+            if (transactionDate.getYear() == prevMonth.getYear() &&
+                    transactionDate.getMonth() == prevMonth.getMonth()) {
+                displayTransaction(entry);
+            }
+        }
+    }
+    public static void yearToDate(ArrayList<Transactions> list) {
+        LocalDate today = LocalDate.now();
+
+        System.out.println("Year to Date");
+
+        for (Transactions entry : list) {
+            LocalDate transactionDate = LocalDate.parse(entry.date);
+
+            if (transactionDate.getYear() == today.getYear()) {
+                displayTransaction(entry);
+            }
+        }
+    }
+    public static void previousYear(ArrayList<Transactions> list) {
+        LocalDate today = LocalDate.now();
+        int prevYear = today.getYear() - 1;
+
+        System.out.println("Previous Year");
+
+        for (Transactions entry : list) {
+            LocalDate transactionDate = LocalDate.parse(entry.date);
+
+            if (transactionDate.getYear() == prevYear) {
+                displayTransaction(entry);
+            }
+        }
+    }
+    public static void searchByVendor(ArrayList<Transactions> list) {
+        System.out.print("Enter vendor name: ");
+        String vendor = sc.nextLine().trim();
+
+        System.out.println("Search Results");
+
+        for (Transactions entry : list) {
+            if (entry.vendor.contains(vendor)) {
+                displayTransaction(entry);
+            }
+        }
+    }
+    // display method
+    public static void displayTransaction(Transactions entry) {
+        System.out.println(entry.date + ", " + entry.time + ", " + entry.description +
+                ", " + entry.vendor + ", " + entry.amount);
     }
 }
