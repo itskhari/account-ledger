@@ -12,7 +12,7 @@ public class AccountingLedgerApp {
     static ArrayList<Transactions> list = new ArrayList<>();
 
     public static void main(String[] args) {
-        // home screen
+    // home screen
         boolean run = true;
 
         while (run) {
@@ -33,9 +33,9 @@ public class AccountingLedgerApp {
                 case 2:
                     makePayment();
                     break;
-//                case 3:
-//                    ledger();
-//                    break;
+               case 3:
+                   ledger();
+                    break;
                 case 4:
                     System.out.println("Thank You for using the Account Ledger! Goodbye");
                     run = false;
@@ -110,6 +110,7 @@ public class AccountingLedgerApp {
                     }
                     break;
                 case 4:
+                    System.out.println("Exiting to Home Screen");
                     run = false;
                     break;
                 default:
@@ -183,6 +184,7 @@ public class AccountingLedgerApp {
                     }
                     break;
                 case 4:
+                    System.out.println("Exiting to Home Screen");
                     run = false;
                     break;
                 default:
@@ -212,6 +214,8 @@ public class AccountingLedgerApp {
     }
     // ledger screen
     public static void ledger() {
+        ArrayList<Transactions> list = loadTransactions();
+        Collections.reverse(list);
         boolean run = true;
 
         while (run) {
@@ -221,21 +225,21 @@ public class AccountingLedgerApp {
             System.out.println("\t (R) Reports");
             System.out.println("\t (H) Home Screen");
             System.out.print("Enter your choice here: ");
-            String choice = sc.nextLine();
+            String choice = sc.nextLine().trim().toUpperCase();
 
             switch (choice) {
-                case 1:
-                    showAllEntries();
+                case "A":
+                    showAllEntries(list);
                     break;
-                case 2:
-                    showDeposits();
+                case "D":
+                    showDeposits(list);
                     break;
-                case 3:
-                    showPayments();
+                case "P":
+                    showPayments(list);
                     break;
-                case 4:
-                    showReports();
-                case 5:
+                case "R":
+                    showReports(list);
+                case "H":
                     System.out.println("Exiting to Home Screen");
                     run = false;
                     break;
@@ -245,8 +249,8 @@ public class AccountingLedgerApp {
 
         }
     }
+    // load transactions method
     public static ArrayList<Transactions> loadTransactions() {
-        Collections.reverse(list);
 
         try(BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))) {
             String line;
@@ -266,5 +270,45 @@ public class AccountingLedgerApp {
             System.out.println("Error loading transactions" + e.getMessage());
         }
           return list;
+    }
+    // ledger options
+    public static void showAllEntries(ArrayList<Transactions> list) {
+        for (Transactions entry : list) {
+            System.out.println(entry.date + ", " + entry.time + ", " + entry.description +
+                    ", " + entry.vendor + ", " + entry.amount);
+        }
+
+    }
+    public static void showDeposits(ArrayList<Transactions> list) {
+        for (Transactions entry : list) {
+            if (entry.amount > 0) {
+                System.out.println(entry.date + ", " + entry.time + ", " + entry.description +
+                        ", " + entry.vendor + ", " + entry.amount);
+            }
+        }
+    }
+    public static void showPayments(ArrayList<Transactions> list) {
+        for (Transactions entry : list) {
+            if (entry.amount < 0) {
+                System.out.println(entry.date + ", " + entry.time + ", " + entry.description +
+                        ", " + entry.vendor + ", " + entry.amount);
+            }
+        }
+    }
+    public static void showReports(ArrayList<Transactions> list){
+        boolean run = true;
+
+        while (run) {
+
+            System.out.println("\t1 Month to Date");
+            System.out.println("\t2 Previous Month");
+            System.out.println("\t3 Year to Date");
+            System.out.println("\t4 Previous Year");
+            System.out.println("\t5 Search by Name");
+            System.out.println("\t6 Go Back/Cancel");
+            System.out.print("Enter you choice here: ");
+            int choice = sc.nextInt();
+            sc.nextLine();
+        }
     }
 }
