@@ -12,7 +12,7 @@ public class AccountingLedgerApp {
     static ArrayList<Transactions> list = new ArrayList<>();
 
     public static void main(String[] args) {
-    // home screen
+        // home screen
         boolean run = true;
 
         while (run) {
@@ -33,8 +33,8 @@ public class AccountingLedgerApp {
                 case 2:
                     makePayment();
                     break;
-               case 3:
-                   ledger();
+                case 3:
+                    ledger();
                     break;
                 case 4:
                     System.out.println("Thank You for using the Account Ledger! Goodbye");
@@ -85,7 +85,6 @@ public class AccountingLedgerApp {
                     System.out.println("Invalid selection; Please try again");
 
 
-
             }
 
         }
@@ -110,7 +109,7 @@ public class AccountingLedgerApp {
             while (true) {
                 System.out.print("Enter Card Number (16-Digits): ");
                 cardNum = sc.nextLine().trim();
-                if (cardNum.matches("\\d{16}"))
+                if (cardNum.matches("\\d{16}")) // explain  this
                     break;
                 System.out.println("Invalid card number. Must be 16 digits");
             }
@@ -126,7 +125,7 @@ public class AccountingLedgerApp {
             System.out.println("Description: " + description);
             System.out.println("Vendor: " + vendor);
             System.out.println("Payment Amount: $" + payment);
-            System.out.println("Card Ending in " + cardNum.substring(12));
+            System.out.println("Card Ending in " + cardNum.substring(12)); // explain this
             System.out.println("Expiration: " + date);
             System.out.println("Zip-Code: " + zip);
 
@@ -166,19 +165,20 @@ public class AccountingLedgerApp {
         try (
                 FileWriter filewriter = new FileWriter("transactions.csv", true);
                 BufferedWriter writer = new BufferedWriter(filewriter)
-                ) {
-                LocalDate date = LocalDate.now();
-                LocalTime time = LocalTime.now().withNano(0);
+        ) {
+            LocalDate date = LocalDate.now();
+            LocalTime time = LocalTime.now().withNano(0);
 
-                String csvline = date + ", " + time + ", " + description + ", " + vendor + ", " + amount;
+            String csvline = date + ", " + time + ", " + description + ", " + vendor + ", " + amount;
 
-                writer.write(csvline);
-                writer.newLine();
+            writer.write(csvline);
+            writer.newLine();
 
         } catch (IOException e) {
             System.out.println("Error saving transaction" + e.getMessage());
         }
     }
+
     // ledger screen
     public static void ledger() {
         ArrayList<Transactions> list = loadTransactions();
@@ -216,16 +216,17 @@ public class AccountingLedgerApp {
 
         }
     }
+
     // load transactions method
     public static ArrayList<Transactions> loadTransactions() {
 
-        try(BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))) {
             String line;
 
             while ((line = reader.readLine()) != null) {
-                String [] parts = line.split(",");
+                String[] parts = line.split(",");
                 String date = parts[0];
-                String time = parts [1];
+                String time = parts[1];
                 String description = parts[2];
                 String vendor = parts[3];
                 double amount = Double.parseDouble(parts[4]);
@@ -236,8 +237,9 @@ public class AccountingLedgerApp {
         } catch (Exception e) {
             System.out.println("Error loading transactions" + e.getMessage());
         }
-          return list;
+        return list;
     }
+
     // ledger options
     public static void showAllEntries(ArrayList<Transactions> list) {
         for (Transactions entry : list) {
@@ -246,6 +248,7 @@ public class AccountingLedgerApp {
         }
 
     }
+
     public static void showDeposits(ArrayList<Transactions> list) {
         for (Transactions entry : list) {
             if (entry.amount > 0) {
@@ -254,6 +257,7 @@ public class AccountingLedgerApp {
             }
         }
     }
+
     public static void showPayments(ArrayList<Transactions> list) {
         for (Transactions entry : list) {
             if (entry.amount < 0) {
@@ -274,10 +278,12 @@ public class AccountingLedgerApp {
             System.out.println("\t3 Year to Date");
             System.out.println("\t4 Previous Year");
             System.out.println("\t5 Search by Name");
+            System.out.println("\t6 Custom Search");
             System.out.println("\t0 Back");
             System.out.print("Enter you choice here: ");
             int choice = sc.nextInt();
             sc.nextLine();
+
 
             switch (choice) {
                 case 1:
@@ -315,11 +321,12 @@ public class AccountingLedgerApp {
             LocalDate transactionDate = LocalDate.parse(entry.date);
 
             if (transactionDate.getYear() == today.getYear() &&
-            transactionDate.getMonth() == today.getMonth()) {
+                    transactionDate.getMonth() == today.getMonth()) {
                 displayTransaction(entry);
             }
         }
     }
+
     public static void previousMonth(ArrayList<Transactions> list) {
         LocalDate today = LocalDate.now();
         LocalDate prevMonth = today.minusMonths(1);
@@ -335,6 +342,7 @@ public class AccountingLedgerApp {
             }
         }
     }
+
     public static void yearToDate(ArrayList<Transactions> list) {
         LocalDate today = LocalDate.now();
 
@@ -348,6 +356,7 @@ public class AccountingLedgerApp {
             }
         }
     }
+
     public static void previousYear(ArrayList<Transactions> list) {
         LocalDate today = LocalDate.now();
         int prevYear = today.getYear() - 1;
@@ -362,6 +371,7 @@ public class AccountingLedgerApp {
             }
         }
     }
+
     public static void searchByVendor(ArrayList<Transactions> list) {
         System.out.print("Enter vendor name: ");
         String vendor = sc.nextLine().trim();
@@ -374,9 +384,12 @@ public class AccountingLedgerApp {
             }
         }
     }
+
     // display method
     public static void displayTransaction(Transactions entry) {
         System.out.println(entry.date + ", " + entry.time + ", " + entry.description +
                 ", " + entry.vendor + ", " + entry.amount);
     }
 }
+
+
