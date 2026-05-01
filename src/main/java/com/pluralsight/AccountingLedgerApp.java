@@ -66,7 +66,7 @@ public class AccountingLedgerApp {
             } else {
                 System.out.println("Deposit Cancelled");
             }
-            System.out.println("Would you like to:");
+            System.out.println("\n Would you like to:");
             System.out.println("\t 1 Make another deposit");
             System.out.println("\t 2 Go Back to Home Screen");
             System.out.print("Enter your choice here: ");
@@ -113,15 +113,28 @@ public class AccountingLedgerApp {
                     break;
                 System.out.println("Invalid card number. Must be 16 digits");
             }
-            System.out.print("Expiration date: ");
+            System.out.print("Expiration date (MM/YY): ");
             String date = sc.nextLine();
 
-            System.out.print("CVV 3 Digits: ");
-            String cvv = sc.nextLine();
+            String cvv = "";
+            while (true) {
+                System.out.print("CVV (3 Digits): ");
+                cvv = sc.nextLine().trim();
+                if (cvv.matches("\\d{3}")) // explain  this
+                    break;
+                System.out.println("Invalid entry. Must be 3 digits");
+            }
 
-            System.out.print("Zip-Code: ");
-            String zip = sc.nextLine();
+            String zip = "";
+            while (true) {
+            System.out.print("Zip-Code (5 digits): ");
+            zip = sc.nextLine().trim();
+            if (zip.matches("\\d{5}")) // explain  this
+                break;
+            System.out.println("Invalid entry. Must be 5 digits");
+            }
 
+            System.out.println("\n Payment Summary");
             System.out.println("Description: " + description);
             System.out.println("Vendor: " + vendor);
             System.out.println("Payment Amount: $" + payment);
@@ -138,7 +151,7 @@ public class AccountingLedgerApp {
             } else {
                 System.out.println("Payment Cancelled");
             }
-            System.out.println("Would you like to:");
+            System.out.println("\n Would you like to:");
             System.out.println("\t 1 Make another Payment");
             System.out.println("\t 2 Go Back to Home Screen");
             System.out.print("Enter your choice here: ");
@@ -167,7 +180,7 @@ public class AccountingLedgerApp {
                 BufferedWriter writer = new BufferedWriter(filewriter)
         ) {
             LocalDate date = LocalDate.now();
-            LocalTime time = LocalTime.now().withNano(0);
+            LocalTime time = LocalTime.now().withNano(0); // explain this
 
             String csvline = date + ", " + time + ", " + description + ", " + vendor + ", " + amount;
 
@@ -182,7 +195,7 @@ public class AccountingLedgerApp {
     // ledger screen
     public static void ledger() {
         ArrayList<Transactions> list = loadTransactions();
-        Collections.reverse(list);
+        Collections.reverse(list); // explain this
         boolean run = true;
 
         while (run) {
@@ -206,6 +219,7 @@ public class AccountingLedgerApp {
                     break;
                 case "R":
                     showReports(list);
+                    break;
                 case "H":
                     System.out.println("Returning to Home Screen");
                     run = false;
@@ -219,6 +233,7 @@ public class AccountingLedgerApp {
 
     // load transactions method
     public static ArrayList<Transactions> loadTransactions() {
+        list.clear(); // explain this
 
         try (BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))) {
             String line;
@@ -278,7 +293,6 @@ public class AccountingLedgerApp {
             System.out.println("\t3 Year to Date");
             System.out.println("\t4 Previous Year");
             System.out.println("\t5 Search by Name");
-            System.out.println("\t6 Custom Search");
             System.out.println("\t0 Back");
             System.out.print("Enter you choice here: ");
             int choice = sc.nextInt();
@@ -376,7 +390,7 @@ public class AccountingLedgerApp {
         System.out.print("Enter vendor name: ");
         String vendor = sc.nextLine().trim();
 
-        System.out.println("Search Results");
+        System.out.println("\n Search Results");
 
         for (Transactions entry : list) {
             if (entry.vendor.contains(vendor)) {
